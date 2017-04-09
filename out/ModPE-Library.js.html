@@ -148,6 +148,14 @@ var Server = function() {
     };
 
     /**
+     * returns local player Object
+     * @return {LocalPlayer} local player
+     */
+    this.getLocalPlayer = function(){
+        return new LocalPlayer(ModPE.native.Player.getEntity());
+    };
+
+    /**
      * sends Message to everyone
      * @param  {String} message message
      * @return {Boolean}        succeeded
@@ -252,6 +260,205 @@ var Item = function(id, count, damage, name) {
         return this;
     };
 };
+
+/**
+ * @class
+ * Block Object
+ * @param {Number} id       block id
+ * @param {Number} damage   block damage
+ */
+var Block = function(id, damage){
+    this.id = id || ModPE.native.Level.getTile(position[0], position[1], position[2]);
+    this.damage = damage || ModPE.native.Level.getData(position[0], position[1], position[2]);
+
+    /**
+     * returns item id
+     * @return {Number} item id
+     */
+    this.getId = function() {
+        return this.id;
+    };
+
+    /**
+     * sets item id
+     * @param {Number} id item id
+     */
+    this.setId = function(id) {
+        this.id = id;
+        return this;
+    };
+
+    /**
+     * returns item damage
+     * @return {Number} item damage
+     */
+    this.getDamage = function() {
+        return this.damage;
+    };
+
+    /**
+     * sets item damage
+     * @param {Number} damage item damage
+     */
+    this.setDamage = function(damage) {
+        this.damage = damage;
+        return this;
+    };
+
+    /**
+     * defines new Block
+     * @param  {String} name       Block's name
+     * @param  {Array} texture     Block's texture
+     * @param  {Number} material   Block's material Number
+     * @param  {Number} opaque     Block's opaque
+     * @param  {Number} renderType Block's renderType
+     */
+    this.defineBlock = function(name, texture, material, opaque, renderType) {
+        ModPE.native.Block.defineBlock(this.id, name, texture, material, opaque, renderType);
+        return this;
+    };
+
+    /**
+     * defines Liquid Block
+     * @param  {String} name     Block's name
+     * @param  {Array} texture   Block's texture
+     * @param  {Number} material Block's material Number
+     */
+    this.defineLiquidBlock = function(name, texture, material){
+        ModPE.native.Block.defineLiquidBlock(this.id, name, texture, material);
+        return this;
+    };
+
+    /**
+     * returns Block's destroy time
+     * @return {Number} destroy time
+     */
+    this.getDestroyTime = function(){
+        return ModPE.native.Block.getDestroyTime(this.id);
+    };
+
+    /**
+     * sets Block's destroy time
+     * @param {Number} time destroy time
+     */
+    this.setDestroyTime = function(time){
+        ModPE.native.Block.setDestroyTime(this.id, time);
+        return this;
+    };
+
+    /**
+     * returns Block's Friction (0 &lt;= Friction &lt;= 1)
+     * @return {Number} Block's Friction
+     */
+    this.getFriction = function(){
+        return ModPE.native.Block.getFriction(this.id);
+    };
+
+    /**
+     * sets Block's Friction (0 &lt;= Friction &lt;= 1, if Friction == 0, Player's position becomes NaN)
+     * @param {Number} friction Block's Friction
+     */
+    this.setFriction = function(friction){
+        ModPE.native.Block.setFriction(this.id, friction);
+        return this;
+    };
+
+    /**
+     * returns Block's render layer
+     * @return {Number} render layer
+     */
+    this.getRenderLayer = function(){
+        return ModPE.native.Block.getRenderLayer(this.id);
+    };
+
+    /**
+     * sets Block's render layer
+     * @param {Number} renderLayer render layer
+     */
+    this.setRenderLayer = function(renderLayer){
+        ModPE.native.Block.setRenderLayer(this.id, renderLayer);
+    };
+
+    /**
+     * returns Block's render type
+     * @return {Number} render type
+     */
+    this.getRenderType = function(){
+        return ModPE.native.Block.getRenderType(this.id);
+    };
+
+    /**
+     * sets Block's render type
+     * @param {Number} renderType render type
+     */
+    this.setRenderType = function(renderType){
+        ModPE.native.Block.setRenderType(this.id, renderType);
+    };
+
+    /**
+     * returns Block's texture coords
+     * @param  {Number} side Block side(0 &lt;= side &lt;= 5, y- y+ z- z+ x- x+)
+     * @return {Number}      texture coord
+     */
+    this.getTextureCoords = function(side){
+        return ModPE.native.Block.getTextureCoords(this.id, side, this.damage);
+    };
+
+    /**
+     * sets Block's color
+     * @param {Array} color color[damage 0 color, damage 1 color, ...]
+     */
+    this.setColor = function(color){
+        ModPE.native.Block.setColor(this.id, color);
+        return this;
+    };
+
+    /**
+     * sets Block's explosion resistance
+     * @param {Number} resesistance explosion resistance
+     */
+    this.setExplosionResistance = function(resesistance){
+        ModPE.native.Block.setExplosionResistance(this.id, resesistance);
+    };
+
+    /**
+     * sets Block's light level
+     * @param {Number} level light level(15 = torch, 16 = glowstone, sunlight)
+     */
+    this.setLightLevel = function(level){
+        ModPE.native.Block.setLightLevel(this.id, level);
+        return this;
+    };
+
+    /**
+     * sets Block's light opacity
+     * @param {Number} opacity light opacity
+     */
+    this.setLightOpacity = function(opacity){
+        ModPE.native.Block.setLightOpacity(this.id, opacity);
+        return this;
+    };
+
+    /**
+     * makes Block consume redstone
+     * @param {Boolean} callRedstoneUpdateHook true->calls redstoneUpdateHook
+     */
+    this.setRedstoneConsumer = function(callRedstoneUpdateHook){
+        ModPE.native.Block.setRedstoneConsumer(this.id, callRedstoneUpdateHook);
+        return this;
+    };
+
+    /**
+     * sets Block's shape
+     * @param {Array} startPosition start Position[x, t, z]
+     * @param {Array} endPosition   end Position[x, t, z]
+     * @param {Number} damage       Block damage
+     */
+    this.setShape = function(startPosition, endPosition, damage){
+        ModPE.native.Block.setShape(this.id, startPosition[0], startPosition[1], startPosition[2], endPosition[0], endPosition[1], endPosition[2], damage);
+    };
+};
+
 /**
  * @class
  * Entity Object
@@ -878,6 +1085,464 @@ Player.prototype.sendMessage = function(message) {
     return false;
 };
 
+/**
+ * @class
+ * Local Player Object
+ */
+var LocalPlayer = Player;
+
+/**
+ * sends client Message
+ * @param  {String} message message
+ */
+LocalPlayer.prototype.clientMessage = function(message){
+    clientMessage(message);
+    return this;
+};
+
+/**
+ * adds exp
+ * @param {Number} exp exp
+ */
+LocalPlayer.prototype.addExp = function(exp){
+    ModPE.native.Player.addExp(exp);
+    return this;
+};
+
+/**
+ * returns exp
+ * @return {Number} exp
+ */
+LocalPlayer.prototype.getExp = function(){
+    return ModPE.native.Player.getExp();
+};
+
+/**
+ * sets exp
+ * @param {Number} exp exp
+ */
+LocalPlayer.prototype.setExp = function(exp){
+    ModPE.native.Player.setExp(exp);
+    return this;
+};
+
+/**
+ * adds item in creative inventory
+ * @param {Item} item item
+ */
+LocalPlayer.prototype.addItemCreativeInv = function(item){
+    ModPE.native.Player.addItemCreativeInv(item.getId(), item.getCount(), item.getDamage());
+    return this;
+};
+
+/**
+ * adds item in inventory
+ * @param {Item} item item
+ */
+LocalPlayer.prototype.addItemInventory = function(item){
+    ModPE.native.Player.addItemInventory(item.getId(), item.getCount(), item.getDamage());
+    return this;
+};
+
+/**
+ * returns is player can fly
+ * @return {Boolean} can fly
+ */
+LocalPlayer.prototype.canFly = function(){
+    return ModPE.native.Player.canFly();
+};
+
+/**
+ * sets player can fly
+ * @param {Boolean} fly can fly
+ */
+LocalPlayer.prototype.setCanFly = function(fly){
+    ModPE.native.Player.setCanFly(fly);
+    return this;
+};
+
+/**
+ * clears inventory slot
+ * @param  {Number} slot slot number(0 &lt;= slot &lt;= 27)
+ */
+LocalPlayer.prototype.clearInventorySlot = function(slot){
+    ModPE.native.Player.clearInventorySlot(slot);
+    return this;
+};
+
+/**
+ * enchants item
+ * @param  {Number} slot  slot
+ * @param  {Number} id    enchant id
+ * @param  {Number} power enchant power
+ */
+LocalPlayer.prototype.enchant = function(slot, id, power){
+    ModPE.native.Player.enchant(slot, id, power);
+    return this;
+};
+
+/**
+ * returns Armor
+ * @param  {Number} slot slot
+ * @return {Item}        Armor item
+ */
+LocalPlayer.prototype.getArmor = function(slot){
+    if (!slot){
+        return [
+        new Item(ModPE.native.Player.getArmorSlot(0), 1, ModPE.native.Player.getArmorSlotDamage(0)),
+        new Item(ModPE.native.Player.getArmorSlot(1), 1, ModPE.native.Player.getArmorSlotDamage(1)),
+        new Item(ModPE.native.Player.getArmorSlot(2), 1, ModPE.native.Player.getArmorSlotDamage(2)),
+        new Item(ModPE.native.Player.getArmorSlot(3), 1, ModPE.native.Player.getArmorSlotDamage(3)),
+    ];
+    } else {
+        return new Item(ModPE.native.Player.getArmorSlot(slot), 1, ModPE.native.Player.getArmorSlotDamage(slot));
+    }
+};
+
+/**
+ * sets Armor
+ * @param {Item} item Armor item
+ * @param {Number} slot slot
+ */
+LocalPlayer.prototype.setArmor = function(item, slot){
+    ModPE.native.Player.setArmor(slot, item.getId(), item.getCount(), item.getDamage());
+        ModPE.native.Player.setArmorCustomName(slot, item.getName());
+        return this;
+};
+
+/**
+ * returns carring item
+ * @return {Item} carring item
+ */
+LocalPlayer.prototype.getCarriedItem = function(){
+    return new Item(ModPE.native.Player.getCarriedItem(), ModPE.native.Player.getCarriedItemCount(), ModPE.native.Player.getCarriedItemData());
+};
+
+/**
+ * sets carring item
+ * @param {Item} item carring item
+ */
+LocalPlayer.prototype.setCarriedItem = function(item){
+    ModPE.native.Player.setCarriedItem(item.getId(), item.getCount(), item.getDamage());
+    return this;
+};
+
+/**
+ * gets player dimension
+ * @return {Number} dimension
+ */
+LocalPlayer.prototype.getDimension = function(){
+    return ModPE.native.Player.getDimension();
+};
+
+/**
+ * returns enchantments
+ * @param  {Number} slot slot
+ * @return {Array}       enchantments
+ */
+LocalPlayer.prototype.getEnchantments = function(slot){
+    return ModPE.native.Player.getEnchantments(slot);
+};
+
+/**
+ * returns exhaustion
+ * @return {Number} exhaustion
+ */
+LocalPlayer.prototype.getExhaustion = function(){
+    return ModPE.native.Player.getExhaustion();
+};
+
+/**
+ * sets exhaustion
+ * @param {Number} exhaustion exhaustion
+ */
+LocalPlayer.prototype.setExhaustion = function(exhaustion){
+    ModPE.native.Player.setExhaustion(exhaustion);
+    return this;
+};
+
+/**
+ * returns hunger
+ * @return {Number} hunger
+ */
+LocalPlayer.prototype.getHunger = function(){
+    return ModPE.native.Player.getHunger();
+};
+
+/**
+ * sets hunger
+ * @param {Number} hunger hunger
+ */
+LocalPlayer.prototype.setHunger = function(hunger){
+    ModPE.native.Player.setHunger(hunger);
+    return this;
+};
+
+/**
+ * returns inventory slot
+ * @param  {Number} slot slot number(0 &lt;= slot &lt;= 27)
+ * @return {Item}      item
+ */
+LocalPlayer.prototype.getInventory = function(slot){
+    if (!slot){
+        return new Item(ModPE.native.Player.getInventorySlot(slot), ModPE.native.Player.getInventorySlotCount(slot), ModPE.native.Player.getInventorySlotData(slot));
+    } else {
+        var ans = [];
+        for (var i = 0 ; i &lt; 27 ; i++) ans.push(new Item(ModPE.native.Player.getInventorySlot(i), ModPE.native.Player.getInventorySlotCount(i), ModPE.native.Player.getInventorySlotData(i)));
+        return ans;
+    }
+};
+
+/**
+ * sets inventory slot
+ * @param {Number} slot slot number(0 &lt;= slot &lt;= 27)
+ * @param {Item} item   item
+ */
+LocalPlayer.prototype.setInventory = function(slot, item){
+    ModPE.native.Player.setInventorySlot(slot, item.getId(), item.getCount(), item.getDamage());
+    return this;
+};
+
+/**
+ * returns level
+ * @return {Number} level
+ */
+LocalPlayer.prototype.getLevel = function(){
+    return ModPE.native.Player.getLevel();
+};
+
+/**
+ * sets level
+ * @param {Number} level level
+ */
+LocalPlayer.prototype.setLevel = function(level){
+    ModPE.native.Player.setLevel(level);
+    return this;
+};
+
+/**
+ * returns pointed Block
+ * @return {Block} pointed block
+ */
+LocalPlayer.prototype.getPointedBlock = function(){
+    return new Block(ModPE.native.Player.getPointedBlockId(), 1, ModPE.native.Player.getPointedBlockData());
+};
+
+/**
+ * returns pointed side
+ * @return {Number} side(0 &lt;= side &lt;= 5, y- y+ z- z+ x- x+)
+ */
+LocalPlayer.prototype.getPointedBlockSide = function(){
+    return ModPE.native.Player.getPointedBlockSide();
+};
+
+/**
+ * returns pointed block position
+ * @return {Array} Position[x, y, z]
+ */
+LocalPlayer.prototype.getPointedBlockPosition = function(){
+    return [ModPE.native.Player.getPointedBlockX(), ModPE.native.Player.getPointedBlockY(), ModPE.native.Player.getPointedBlockZ()];
+};
+
+/**
+ * returns pointed block x
+ * @return {Number} x position
+ */
+LocalPlayer.prototype.getPointedBlockX = function(){
+    return ModPE.native.Player.getPointedBlockX();
+};
+
+/**
+ * returns pointed block y
+ * @return {Number} y position
+ */
+LocalPlayer.prototype.getPointedBlockY = function(){
+    return ModPE.native.Player.getPointedBlockY();
+};
+
+/**
+ * returns pointed block z
+ * @return {Number} z position
+ */
+LocalPlayer.prototype.getPointedBlockZ = function(){
+    return ModPE.native.Player.getPointedBlockZ();
+};
+
+/**
+ * returns pointed Entity
+ * @return {Entity} Pointed Entity
+ */
+LocalPlayer.prototype.getPointedEntity = function(){
+    return new Entity(ModPE.native.Player.getPointedEntity());
+};
+
+/**
+ * returns pointed vec
+ * @return {Array} vec[x, y, z]
+ */
+LocalPlayer.prototype.getPointedVec = function(){
+    return [ModPE.native.Player.getPointedVecX(), ModPE.native.Player.getPointedVecY(), ModPE.native.Player.getPointedVecZ()];
+};
+
+/**
+ * returns pointed x vec
+ * @return {Number} x vec
+ */
+LocalPlayer.prototype.getPointedVecX = function(){
+    return ModPE.native.Player.getPointedVecX();
+};
+
+/**
+ * returns pointed y vec
+ * @return {Number} y vec
+ */
+LocalPlayer.prototype.getPointedVecY = function(){
+    return ModPE.native.Player.getPointedVecY();
+};
+
+/**
+ * returns pointed z vec
+ * @return {Number} z vec
+ */
+LocalPlayer.prototype.getPointedVecZ = function(){
+    return ModPE.native.Player.getPointedVecZ();
+};
+
+/**
+ * returns saturation
+ * @return {Number} saturation
+ */
+LocalPlayer.prototype.getSaturation = function(){
+    return ModPE.native.Player.getSaturation();
+};
+
+/**
+ * sets saturation
+ * @param {Number} saturation saturation
+ */
+LocalPlayer.prototype.setSaturation = function(saturation){
+    ModPE.native.Player.setSaturation(saturation);
+};
+
+/**
+ * returns score
+ * @return {Number} score
+ */
+LocalPlayer.prototype.getScore = function() {
+    return ModPE.native.Player.getScore();
+};
+
+/**
+ * returns selected slot id
+ * @return {Number} slot id
+ */
+LocalPlayer.prototype.getSelectedSlotId = function(){
+    return ModPE.native.Player.getSelectedSlotId();
+};
+
+/**
+ * sets selected slot id
+ * @param {Number} id slot id
+ */
+LocalPlayer.prototype.setSelectedSlotId = function(id){
+    ModPE.native.Player.setSelectedSlotId(id);
+    return this;
+};
+
+/**
+ * returns player position
+ * @return {Array} Position[x, y, z]
+ */
+LocalPlayer.prototype.getPosition = function(){
+    return [
+        ModPE.native.Player.getX(),
+        ModPE.native.Player.getY(),
+        ModPE.native.Player.getZ()
+    ];
+};
+
+/**
+ * sets player position
+ * @param {Array} position Position[x, y, z]
+ */
+LocalPlayer.prototype.setPosition = function(){
+    if (arguments.length === 2) {
+        ModPE.native.Entity.setPosition(this.id, arguments[0][0], arguments[0][1], arguments[0][2]);
+    } else {
+        ModPE.native.Entity.setPosition(this.id, arguments[0], arguments[1], arguments[2]);
+    }
+    return this;
+};
+
+/**
+ * sets x position
+ * @param {Number} x x position
+ */
+LocalPlayer.prototype.setX = function(x){
+    ModPE.native.Entity.setPosition(this.id, x, ModPE.native.Player.getY(), ModPE.native.Player.getZ());
+    return this;
+};
+
+/**
+ * returns x position
+ * @return {Number} x position
+ */
+LocalPlayer.prototype.getX = function(){
+    return ModPE.native.Player.getX();
+};
+
+/**
+ * sets y position
+ * @param {Number} y y position
+ */
+LocalPlayer.prototype.setY = function(y){
+    ModPE.native.Entity.setPosition(this.id, ModPE.native.Player.getX(), y, ModPE.native.Player.getZ());
+    return this;
+};
+
+/**
+ * returns y position
+ * @return {Number} y position
+ */
+LocalPlayer.prototype.getY = function(){
+    return ModPE.native.Player.getY();
+};
+
+/**
+ * sets z position
+ * @param {Number} z z position
+ */
+LocalPlayer.prototype.setZ = function(z){
+    ModPE.native.Entity.setPosition(this.id, ModPE.native.Player.getX(), ModPE.native.Player.getY(), z);
+    return this;
+};
+
+/**
+ * returns z position
+ * @return {Number} z position
+ */
+LocalPlayer.prototype.getZ = function(){
+    return ModPE.native.Player.getZ();
+};
+
+/**
+ * returns is player flying
+ * @return {Boolean} is flying
+ */
+LocalPlayer.prototype.isFlying = function(){
+    return ModPE.native.Player.isFlying();
+};
+
+/**
+ * sets item custom name
+ * @param {Number} slot slot Number
+ * @param {String} name custom name
+ */
+LocalPlayer.prototype.setItemCustomName = function(slot, name){
+    ModPE.native.Player.setItemCustomName(slot, name);
+};
+
+
 function onRethodPELoaded() {
     ModPE.onRethodLoaded = true;
 }
@@ -891,13 +1556,13 @@ function onRethodPELoaded() {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Entity.html">Entity</a></li><li><a href="Item.html">Item</a></li><li><a href="Player.html">Player</a></li><li><a href="Server.html">Server</a></li></ul><h3>Global</h3><ul><li><a href="global.html#clearInterval">clearInterval</a></li><li><a href="global.html#clearTimeout">clearTimeout</a></li><li><a href="global.html#setInterval">setInterval</a></li><li><a href="global.html#setTimeout">setTimeout</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Block.html">Block</a></li><li><a href="Entity.html">Entity</a></li><li><a href="Item.html">Item</a></li><li><a href="LocalPlayer.html">LocalPlayer</a></li><li><a href="Player.html">Player</a></li><li><a href="Server.html">Server</a></li></ul><h3>Global</h3><ul><li><a href="global.html#clearInterval">clearInterval</a></li><li><a href="global.html#clearTimeout">clearTimeout</a></li><li><a href="global.html#setInterval">setInterval</a></li><li><a href="global.html#setTimeout">setTimeout</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat Apr 08 2017 23:26:41 GMT+0900 (대한민국 표준시)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sun Apr 09 2017 11:49:36 GMT+0900 (대한민국 표준시)
 </footer>
 
 <script> prettyPrint(); </script>
