@@ -1031,8 +1031,8 @@ var Entity = function(id) {
 };
 
 /**
- * @class
- * Player Object
+ * @class Player Object
+ * @extends Entity
  */
 var Player = Entity;
 
@@ -1058,8 +1058,8 @@ Player.prototype.sendMessage = function(message) {
 };
 
 /**
- * @class
- * Local Player Object
+ * @class Local Player Object
+ * @extends Player
  */
 var LocalPlayer = Player;
 
